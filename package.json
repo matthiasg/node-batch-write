@@ -1,0 +1,27 @@
+{
+  "name": "node-batch-write",
+  "version": "0.0.0",
+  "description": "Combine single writes to an object into optimized batches (originally developed for batching writes agains node-kestrel)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test.js",
+    "dev": "nodemon -e coffee,js test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/matthiasg/node-batch-write.git"
+  },
+  "author": "Matthias Goetzke",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matthiasg/node-batch-write/issues"
+  },
+  "homepage": "https://github.com/matthiasg/node-batch-write",
+  "private": true,
+  "devDependencies": {
+    "cura-test-runner": "0.0.6"
+  }
+}
