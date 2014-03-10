@@ -20,7 +20,7 @@
     "url": "https://github.com/matthiasg/node-batch-write/issues"
   },
   "homepage": "https://github.com/matthiasg/node-batch-write",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "cura-test-runner": "0.0.6"
   }
