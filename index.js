@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(originalWriteFunction){
+module.exports = function(originalWriteFunction, options){
   
   var writing = false;
 
@@ -12,36 +12,49 @@ module.exports = function(originalWriteFunction){
     if(writing){
       pendingMessages.push(message);
       pendingCallbacks.push(cb);
-      return;
+      return hasStillLessMessagesPendingThanAcceptable();
     }
 
-    writeMessages(message,function(){
+    writeMessages([message],function(err){
      
       writePendingMessages();
 
       if(cb){
-        cb();
+        cb(err);
       }
     });
 
+    return hasStillLessMessagesPendingThanAcceptable();
   };
+
+  function hasStillLessMessagesPendingThanAcceptable(){
+    if(options && options.maxPending){
+      return pendingMessages.length < options.maxPending;
+    } else {
+      return true;
+    }
+  }
 
   function writeMessages(messages,cb){
 
     writing = true;
 
-    originalWriteFunction(messages,function(){
+    if(options && options.transform){
+      messages = options.transform(messages);
+    }
+
+    originalWriteFunction(messages,function(err){
       writing = false;
 
       if(cb) {
-        cb();
+        cb(err);
       }
     });
   }
 
   function writePendingMessages(){
 
-    if(!pendingMessages){
+    if(pendingMessages.length === 0){
       return;
     }
 
@@ -51,10 +64,14 @@ module.exports = function(originalWriteFunction){
     var callbacks = pendingCallbacks;
     pendingCallbacks = [];
 
-    writeMessages(messages,function(){
+    if(messages.length === 1){
+      messages = messages[0];
+    }
+
+    writeMessages(messages,function(err){
       callbacks.forEach(function(cb){
         if(cb){
-          cb();
+          cb(err);
         }
       });
     });

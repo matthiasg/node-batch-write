@@ -72,7 +72,7 @@ var options =
         {
             maxBatchSize: 100,
             maxPending: 1000,
-            batchJoinFunction: function(batch){ return batch.length+':'+batch.join(':'); },
+            transform: function(batch){ return batch.length+':'+batch.join(':'); },
             retry: 3
         };
 
@@ -82,7 +82,7 @@ store.writeWithBatching = batchWrite( store.write.bind(store), options );
 How does it work ?
 ==================
 
-The first write it gets is immediately passed on to the write function. It then asynchronously waits for the callback to be executed. Should any other write calls come in during that time it will queue the message in an array. Once the callback comes back (and no errors where raised), the array is sent.
+The first write it gets is immediately passed on to the write function as an array with one element. It then asynchronously waits for the callback to be executed. Should any other write calls come in during that time it will queue the message in an array. Once the callback comes back (and no errors where raised), the array is sent.
 
 If a write or a batch write fails all callbacks get called with the error.
 If the maximum batch size is exceeded a new array is created internally.
