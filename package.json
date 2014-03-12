@@ -1,6 +1,6 @@
 {
   "name": "batch-write",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Combine single writes to an object into optimized batches (originally developed for batching writes agains node-kestrel)",
   "main": "index.js",
   "directories": {

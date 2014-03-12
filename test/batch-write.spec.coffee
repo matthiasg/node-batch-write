@@ -1,5 +1,7 @@
 batchWrite = require('..')
 
+util = require('util')
+
 describe 'Batch Write', ->
   
   it 'exports a function', ->
@@ -107,13 +109,15 @@ describe 'Batch Write', ->
     fn('first')    
 
   it 'uses the output of the transform function as input to the write function', (done)->
-    transformFunction = (batch)->'transformed'
+    transformFunction = (batch)->
+      return 'transformed'
+
     writeFunction = (message)->
       message.should.equal('transformed')
       done()
 
     fn = batchWrite(writeFunction, {transform:transformFunction})
-    fn('first')
+    fn({name:'first'})
 
   it 'returns true when the number of messages in progress is less than the \'maxPending\' option', ->
     fn = batchWrite(DUMMY_WRITE_FUNCTION, {maxPending:10})

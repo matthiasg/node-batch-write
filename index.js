@@ -16,7 +16,6 @@ module.exports = function(originalWriteFunction, options){
     }
 
     writeMessages([message],function(err){
-     
       writePendingMessages();
 
       if(cb){
@@ -36,12 +35,13 @@ module.exports = function(originalWriteFunction, options){
   }
 
   function writeMessages(messages,cb){
-
     writing = true;
 
     if(options && options.transform){
       messages = options.transform(messages);
     }
+
+    //console.log('WRITING: ', typeof(messages), require('util').isArray(messages), messages);
 
     originalWriteFunction(messages,function(err){
       writing = false;
@@ -63,10 +63,6 @@ module.exports = function(originalWriteFunction, options){
 
     var callbacks = pendingCallbacks;
     pendingCallbacks = [];
-
-    if(messages.length === 1){
-      messages = messages[0];
-    }
 
     writeMessages(messages,function(err){
       callbacks.forEach(function(cb){
